@@ -1,14 +1,11 @@
 #分支名称
 branch_name='master'
-#判断文件夹或文件是否存在
-if [ ! -d "/cms_web/" ];then
-  #不存在-拉去git项目
-  git clone https://github.com/Ycl24/cms_web.git
+#删除文件夹
+rm -rf cms_web
+#不存在-拉去git项目
+git clone https://github.com/Ycl24/cms_web.git
 
-  chmod -R 777 cms_web
-  
-fi
-
+chmod -R 777 cms_web
 
 cd cms_web
 
