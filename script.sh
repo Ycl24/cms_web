@@ -4,6 +4,9 @@ branch_name='master'
 #镜像前缀名称
 images_name='cms_web'
 
+#容器名称
+con_name='cms_web_vue_app'
+
 #dockerfile path  相对路径
 dockerfile_path='Dockerfile'
 
@@ -16,6 +19,8 @@ webroot_path='/data/webroot'
 #script path 脚本 相对路径
 script_path='/data/webroot/cms_web_script'
 
+#prot  端口
+prot='80:80'
 
 #删除文件夹
 rm -rf ${project_path}
@@ -32,19 +37,14 @@ git checkout ${branch_name}
 
 git pull origin ${branch_name}
 
-#查询镜像
-images_name_info=`docker images ${images_name}`
+#判断容器否存在
+images_info=`docker ps -a | grep "${con_name}" `
 
-#判断镜像是否存在
-strop_images_name= `echo ${images_name_info} | grep "${images_name}" `
-if [[ "$result" != "" ]]
+if [[ "$images_info" != "" ]]
  then
-    #镜像存在
+    #容器存在
     #查询所有的容器，过滤出Exited状态的容器，列出容器ID，删除这些容器
-    docker rm  -f `docker ps -a|grep ${images_name}|awk '{print $1}'`
-
-    #删除docker crm_web 关键字的镜像
-    docker rmi -f `docker images | grep ${images_name} | awk '{print $3}'` 
+    docker rm  -f `docker ps -a|grep ${con_name}|awk '{print $1}'`
  fi
 
 
@@ -59,6 +59,8 @@ cd ${script_path}
 docker build -f ${dockerfile_path} -t ${images_name}:${tag_name}  ${project_path}
 
 #清理所有悬挂（<none>）镜像
-docker image prune
+docker rmi `docker images -f "dangling=true" -q`
 
-y
+docker run   --name ${con_name}   -d -p ${prot} -d ${images_name}:${tag_name} 
+
+#在脚本目录下执行./
