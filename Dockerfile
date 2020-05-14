@@ -1,18 +1,25 @@
+    #-f 指定的dockerfile文件
+    #-t 镜像名称和tag
+    #../cms_web 工作目录
+     #docker build -f Dockerfile -t cms_web:v1 ../cms_web
+
     #指定node镜像对项目进行依赖安装和打包
-    FROM node AS builder
-    # 将容器的工作目录设置为/app(当前目录，如果/app不存在，WORKDIR会创建/app文件夹)
+    FROM node  AS builder
+    #docker打包vue build 镜像，把打包的镜像 放到 /usr/share/nginx/html/中
+    # 将容器的工作目录设置为/
+    #dockerfile 工作目录设置为/,不管在什么地方都设置/,再调用运行dockerfile时，加上运行目录
     WORKDIR /
     COPY package.json /
+    #打包项目，重新安装npm并更新
+    RUN npm config set registry "https://registry.npm.taobao.org/" \
+      && npm install 
     COPY . /
-    RUN npm run build
+    RUN npm run build 
 
-    # 设置基础镜像 nginx是环境加载的镜像，可以通过 docker images 查看当前的镜像REPOSITORY
+     #指定nginx配置项目，--from=builder 指的是从上一次 build 的结果中提取了编译结果(FROM node:alpine as builder)，即是把刚刚打包生成的dist放进nginx中
     FROM nginx
-    # 定义作者
-    MAINTAINER heetrance <516003013@qq.com>
-    # 将当前目录data/html/文件中的内容复制到 /usr/share/nginx/html/ 这个目录下面
-    COPY dist/  /usr/share/nginx/html/
-    #用本地的 default.conf 配置来替换nginx镜像里的默认配置
-    COPY ../config/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+    COPY --from=builder dist /usr/share/nginx/html/
+ 
+ 
 
 
