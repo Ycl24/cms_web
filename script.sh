@@ -71,6 +71,7 @@ docker build -f ${dockerfile_path} -t ${images_name}:${tag_name}  ${project_path
 #清理所有悬挂（<none>）镜像
 docker rmi `docker images -f "dangling=true" -q`
 
+#映射开启端口
 docker run   --name ${con_name}   -d -p ${prot} -d ${images_name}:${tag_name} 
 
 #在脚本目录下执行./

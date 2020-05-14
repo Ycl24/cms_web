@@ -1,21 +1,9 @@
 <template>
   <div id="app">
-    <h1>欢迎进入测试1</h1>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>欢迎进入嘻恍惚</h1>
+    <h2>个人分享平台正在开发中，请敬请期待!</h2>
   </div>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld.vue'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
-</script>
 
 <style>
 #app {
