@@ -38,15 +38,25 @@ git checkout ${branch_name}
 git pull origin ${branch_name}
 
 #判断容器否存在
-images_info=`docker ps -a | grep "${con_name}" `
+images_con_info=`docker ps -a | grep "${con_name}" `
 
-if [[ "$images_info" != "" ]]
+if [[ "$images_con_info" != "" ]]
  then
     #容器存在
     #查询所有的容器，过滤出Exited状态的容器，列出容器ID，删除这些容器
     docker rm  -f `docker ps -a|grep ${con_name}|awk '{print $1}'`
  fi
 
+
+#判断镜像否存在
+images_name_info=`docker images | grep "${images_name}" `
+
+if [[ "$images_name_info" != "" ]]
+ then
+    #镜像存在
+    #删除docker crm_web 关键字的镜像
+    docker rmi -f `docker images | grep ${images_name} | awk '{print $3}'`
+ fi
 
 
 
