@@ -13,3 +13,5 @@ git checkout ${branch_name}
 
 git pull origin ${branch_name}
 
+#删除docker 80 crm_web dist镜像
+
